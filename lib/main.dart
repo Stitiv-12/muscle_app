@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:muscle_app/pages/exercices_page.dart';
+import 'package:muscle_app/pages/main_page.dart';
 
 void main() {
   runApp(
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const ExercisesPage(),
+      home: const MainPage(),
     );
   }
 }

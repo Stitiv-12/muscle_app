@@ -4,13 +4,15 @@ import 'package:flutter_svg/svg.dart';
 import 'package:muscle_app/models/exercise.dart';
 import 'package:muscle_app/models/muscle.dart';
 import 'package:muscle_app/providers/exercise_providers.dart';
+import 'package:muscle_app/services/favorites_service.dart';
 
 class ExercisesPage extends ConsumerWidget {
   const ExercisesPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final exercisesAsync = ref.watch(exercisesProvider);
+    final search = ref.watch(exerciseSearchProvider);
+    final exercisesAsync = ref.watch(exercisesProvider(search));
 
     return Scaffold(
       appBar: AppBar(
@@ -24,24 +26,40 @@ class ExercisesPage extends ConsumerWidget {
           ),
         ],
       ),
-      body: exercisesAsync.when(
-        loading: () => const Center(
-          child: CircularProgressIndicator(),
-        ),
-        error: (error, stackTrace) => Center(
-          child: Text('Erreur : $error'),
-        ),
-        data: (exercises) {
-          return ListView.builder(
-            itemCount: exercises.length,
-            itemBuilder: (context, index) {
-              final exercise = exercises[index];
-
-              return ExerciseCard(exercise: exercise);
+      body:Column(
+        children: [
+          TextField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: 'Enter a search term',
+            ),
+            onChanged: (value) {
+              ref.read(exerciseSearchProvider.notifier).state = value;
             },
-          );
-        },
-      ),
+          ),
+          Expanded(
+            child: exercisesAsync.when(
+            loading: () => const Center(
+              child: CircularProgressIndicator(),
+            ),
+            error: (error, stackTrace) => Center(
+              child: Text('Erreur : $error'),
+            ),
+            data: (exercises) {
+              return ListView.builder(
+                itemCount: exercises.length,
+                itemBuilder: (context, index) {
+                  final exercise = exercises[index];
+
+                  return ExerciseCard(exercise: exercise);
+                },
+              );
+            },
+          ),
+          )
+        ],
+      ) 
+      
     );
   }
 }
@@ -73,18 +91,18 @@ class ExerciseCard extends StatelessWidget {
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
+                  textAlign: .end,
                 ),
-                const SizedBox(height: 16),
 
                 InteractiveViewer(
+                  maxScale: 3.0,
                   child: Image.network(
                     muscle.img,
                     height: 300,
                     fit: BoxFit.contain,
+                    scale: 3.0,
                   ),
                 ),
-
-                const SizedBox(height: 16),
 
                 TextButton(
                   onPressed: () => Navigator.pop(context),
@@ -111,13 +129,23 @@ class ExerciseCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              exercise.name,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+            Row(
+              children: [
+                Text(
+                  exercise.name,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    FavoritesService.new
+                  }, 
+                  icon: const Icon(Icons.favorite)
+                )
+              ],
             ),
-
+            
             const SizedBox(height: 8),
 
             Text(
@@ -137,13 +165,13 @@ class ExerciseCard extends StatelessWidget {
                         ? const Icon(Icons.fitness_center)
                         : SvgPicture.network(
                             muscle.img,
-                            width: 28,
-                            height: 28,
+                            width: 36,
+                            height: 36,
                             fit: BoxFit.cover,
                             placeholderBuilder: (context) {
                               return const SizedBox(
-                                width: 28,
-                                height: 28,
+                                width: 36,
+                                height: 36,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
                                 ),
