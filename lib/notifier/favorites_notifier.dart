@@ -17,4 +17,11 @@ class FavoritesNotifier extends StateNotifier<Set<int>> {
 
     state = await service.getFavoriteIds();
   }
+
+  /// Retire un exercice de la liste des favoris affichée.
+  Future<void> removeFavorite(int exerciseId) async {
+    await service.removeFavorite(exerciseId);
+
+    state = await service.getFavoriteIds();
+  }
 }

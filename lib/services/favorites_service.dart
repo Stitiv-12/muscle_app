@@ -16,13 +16,30 @@ class FavoritesService {
         .toSet();
   }
 
+  /// Retourne les exercices actuellement marqués comme favoris.
+  List<SavedExercise> getFavoriteExercises() {
+    return _box.values.where((exercise) => exercise.isFavorite).toList();
+  }
+
+  /// Retire un exercice des favoris tout en conservant ses données locales.
+  Future<void> removeFavorite(int exerciseId) async {
+    final savedExercise = _box.get(exerciseId);
+
+    if (savedExercise == null) {
+      return;
+    }
+
+    await _box.put(exerciseId, savedExercise.copyWith(isFavorite: false));
+  }
+
   /// Ajoute ou retire un exercice des favoris dans Hive.
   Future<void> toggleFavorite(ExerciseModel exercise) async {
     final savedExercise = _box.get(exercise.id);
 
     if (savedExercise == null) {
-      final newSavedExercise = SavedExercise.fromApi(exercise)
-          .copyWith(isFavorite: true);
+      final newSavedExercise = SavedExercise.fromApi(
+        exercise,
+      ).copyWith(isFavorite: true);
 
       await _box.put(exercise.id, newSavedExercise);
       return;
