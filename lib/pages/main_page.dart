@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:muscle_app/pages/exercices_page.dart';
+import 'package:muscle_app/pages/favorites_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -11,7 +12,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int currentIndex = 0;
 
-  final pages = const [ExercisesPage(), ExercisesPage(), ExercisesPage()];
+  final pages = const [ExercisesPage(), FavoritesPage(), ExercisesPage()];
 
   @override
   Widget build(BuildContext context) {

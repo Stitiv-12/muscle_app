@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:muscle_app/models/exercise_model.dart';
+import 'package:muscle_app/models/saved_exercise_set.dart';
 import 'package:muscle_app/services/favorites_service.dart';
 
 class FavoritesNotifier extends StateNotifier<Set<int>> {
@@ -14,6 +15,23 @@ class FavoritesNotifier extends StateNotifier<Set<int>> {
 
   Future<void> toggleFavorite(ExerciseModel exercise) async {
     await service.toggleFavorite(exercise);
+
+    state = await service.getFavoriteIds();
+  }
+
+  /// Retire un exercice de la liste des favoris affichée.
+  Future<void> removeFavorite(int exerciseId) async {
+    await service.removeFavorite(exerciseId);
+
+    state = await service.getFavoriteIds();
+  }
+
+  /// Enregistre une série effectuée pour l'exercice indiqué.
+  Future<void> addPerformedSet(
+    int exerciseId,
+    SavedExerciseSet performedSet,
+  ) async {
+    await service.addPerformedSet(exerciseId, performedSet);
 
     state = await service.getFavoriteIds();
   }
