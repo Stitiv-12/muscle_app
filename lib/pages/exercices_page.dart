@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:muscle_app/models/exercise_model.dart';
-import 'package:muscle_app/models/muscleModel.dart';
 import 'package:muscle_app/providers/exercise_providers.dart';
 import 'package:muscle_app/providers/favorite_providers.dart';
 

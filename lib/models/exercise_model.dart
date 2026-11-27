@@ -1,4 +1,4 @@
-import 'package:muscle_app/models/muscleModel.dart';
+import 'package:muscle_app/models/muscle_model.dart';
 
 class ExerciseModel {
   final int id;

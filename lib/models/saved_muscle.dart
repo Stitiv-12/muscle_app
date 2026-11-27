@@ -1,5 +1,5 @@
 import 'package:hive_ce_flutter/hive_flutter.dart';
-import 'package:muscle_app/models/muscleModel.dart';
+import 'package:muscle_app/models/muscle_model.dart';
 
 part 'saved_muscle.g.dart';
 
