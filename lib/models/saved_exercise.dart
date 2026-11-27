@@ -1,6 +1,7 @@
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:muscle_app/models/exercise_model.dart';
 
+import 'saved_exercise_set.dart';
 import 'saved_muscle.dart';
 
 part 'saved_exercise.g.dart';
@@ -31,6 +32,9 @@ class SavedExercise {
   @HiveField(7)
   final List<String> listIds;
 
+  @HiveField(8)
+  final List<SavedExerciseSet> performedSets;
+
   const SavedExercise({
     required this.id,
     required this.name,
@@ -40,6 +44,7 @@ class SavedExercise {
     required this.images,
     this.isFavorite = false,
     this.listIds = const [],
+    this.performedSets = const [],
   });
 
   /// Convertit un exercice reçu de l'API en modèle local.
@@ -56,7 +61,12 @@ class SavedExercise {
     );
   }
 
-  SavedExercise copyWith({bool? isFavorite, List<String>? listIds}) {
+  /// Crée une copie en conservant les données locales non modifiées.
+  SavedExercise copyWith({
+    bool? isFavorite,
+    List<String>? listIds,
+    List<SavedExerciseSet>? performedSets,
+  }) {
     return SavedExercise(
       id: id,
       name: name,
@@ -66,6 +76,7 @@ class SavedExercise {
       images: images,
       isFavorite: isFavorite ?? this.isFavorite,
       listIds: listIds ?? this.listIds,
+      performedSets: performedSets ?? this.performedSets,
     );
   }
 }

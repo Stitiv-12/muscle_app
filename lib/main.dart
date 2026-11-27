@@ -4,6 +4,7 @@ import 'package:muscle_app/pages/main_page.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 
 import 'models/saved_exercise.dart';
+import 'models/saved_exercise_set.dart';
 import 'models/saved_muscle.dart';
 
 Future<void> main() async {
@@ -13,7 +14,8 @@ Future<void> main() async {
 
   Hive
     ..registerAdapter(SavedMuscleAdapter())
-    ..registerAdapter(SavedExerciseAdapter());
+    ..registerAdapter(SavedExerciseAdapter())
+    ..registerAdapter(SavedExerciseSetAdapter());
 
   await Hive.openBox<SavedExercise>('saved_exercises');
 

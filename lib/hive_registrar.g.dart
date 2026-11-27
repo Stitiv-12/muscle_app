@@ -4,11 +4,13 @@
 
 import 'package:hive_ce/hive_ce.dart';
 import 'package:muscle_app/models/saved_exercise.dart';
+import 'package:muscle_app/models/saved_exercise_set.dart';
 import 'package:muscle_app/models/saved_muscle.dart';
 
 extension HiveRegistrar on HiveInterface {
   void registerAdapters() {
     registerAdapter(SavedExerciseAdapter());
+    registerAdapter(SavedExerciseSetAdapter());
     registerAdapter(SavedMuscleAdapter());
   }
 }
@@ -16,6 +18,7 @@ extension HiveRegistrar on HiveInterface {
 extension IsolatedHiveRegistrar on IsolatedHiveInterface {
   void registerAdapters() {
     registerAdapter(SavedExerciseAdapter());
+    registerAdapter(SavedExerciseSetAdapter());
     registerAdapter(SavedMuscleAdapter());
   }
 }
