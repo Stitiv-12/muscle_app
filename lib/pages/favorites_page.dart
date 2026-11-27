@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:muscle_app/models/saved_exercise.dart';
 import 'package:muscle_app/models/saved_exercise_set.dart';
 import 'package:muscle_app/providers/favorite_providers.dart';
+import 'package:muscle_app/providers/settings_providers.dart';
 
 class FavoritesPage extends ConsumerWidget {
   const FavoritesPage({super.key});
@@ -153,6 +154,12 @@ class _WorkoutSetsSheetState extends ConsumerState<WorkoutSetsSheet> {
   final _repetitionsController = TextEditingController();
   final _weightController = TextEditingController();
   final _restController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _restController.text = ref.read(settingsProvider).restSeconds.toString();
+  }
   static final _weightInputFormatter = TextInputFormatter.withFunction((
     oldValue,
     newValue,
@@ -193,7 +200,13 @@ class _WorkoutSetsSheetState extends ConsumerState<WorkoutSetsSheet> {
       return;
     }
 
-    final weight = double.parse(_weightController.text.replaceAll(',', '.'));
+    final settings = ref.read(settingsProvider);
+    final enteredWeight = double.parse(
+      _weightController.text.replaceAll(',', '.'),
+    );
+    final weight = settings.weightUnit == 'lb'
+        ? enteredWeight / 2.2046226218
+        : enteredWeight;
     final performedSet = SavedExerciseSet(
       repetitions: int.parse(_repetitionsController.text),
       weightKg: weight,
@@ -206,7 +219,7 @@ class _WorkoutSetsSheetState extends ConsumerState<WorkoutSetsSheet> {
 
     _repetitionsController.clear();
     _weightController.clear();
-    _restController.clear();
+    _restController.text = settings.restSeconds.toString();
   }
 
   @override
@@ -215,6 +228,7 @@ class _WorkoutSetsSheetState extends ConsumerState<WorkoutSetsSheet> {
     final exercise = ref
         .watch(favoriteServiceProvider)
         .getExercise(widget.exerciseId);
+    final settings = ref.watch(settingsProvider);
 
     if (exercise == null) {
       return const SizedBox.shrink();
@@ -257,7 +271,7 @@ class _WorkoutSetsSheetState extends ConsumerState<WorkoutSetsSheet> {
                       'Série $index : ${set.repetitions} répétitions',
                     ),
                     subtitle: Text(
-                      '${set.weightKg.toStringAsFixed(1)} kg · repos ${set.restSeconds} s',
+                      '${_formatWeight(set.weightKg, settings.weightUnit)} · repos ${set.restSeconds} s',
                     ),
                   );
                 }),
@@ -281,8 +295,8 @@ class _WorkoutSetsSheetState extends ConsumerState<WorkoutSetsSheet> {
                     ),
                     TextFormField(
                       controller: _weightController,
-                      decoration: const InputDecoration(
-                        labelText: 'Poids (kg)',
+                      decoration: InputDecoration(
+                        labelText: 'Poids (${settings.weightUnit})',
                         hintText: 'Ex. 42,5',
                         prefixIcon: Icon(Icons.fitness_center),
                         suffixText: 'kg',
@@ -349,5 +363,11 @@ class _WorkoutSetsSheetState extends ConsumerState<WorkoutSetsSheet> {
       return 'Indique un poids positif ou nul.';
     }
     return null;
+  }
+
+  /// Formate un poids stocké en kilogrammes dans l'unité choisie par l'utilisateur.
+  String _formatWeight(double weightKg, String unit) {
+    final value = unit == 'lb' ? weightKg * 2.2046226218 : weightKg;
+    return '${value.toStringAsFixed(1)} $unit';
   }
 }
