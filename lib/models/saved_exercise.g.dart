@@ -27,13 +27,16 @@ class SavedExerciseAdapter extends TypeAdapter<SavedExercise> {
       listIds: fields[7] == null
           ? const []
           : (fields[7] as List).cast<String>(),
+      performedSets: fields[8] == null
+          ? const []
+          : (fields[8] as List).cast<SavedExerciseSet>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, SavedExercise obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -49,7 +52,9 @@ class SavedExerciseAdapter extends TypeAdapter<SavedExercise> {
       ..writeByte(6)
       ..write(obj.isFavorite)
       ..writeByte(7)
-      ..write(obj.listIds);
+      ..write(obj.listIds)
+      ..writeByte(8)
+      ..write(obj.performedSets);
   }
 
   @override
