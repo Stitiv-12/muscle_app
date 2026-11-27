@@ -11,11 +11,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int currentIndex = 0;
 
-  final pages = const [
-    ExercisesPage(),
-    ExercisesPage(),
-    ExercisesPage(),
-  ];
+  final pages = const [ExercisesPage(), ExercisesPage(), ExercisesPage()];
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +29,7 @@ class _MainPageState extends State<MainPage> {
             icon: Icon(Icons.fitness_center),
             label: 'Exercices',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Favoris',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Favoris'),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
             label: 'Paramètres',

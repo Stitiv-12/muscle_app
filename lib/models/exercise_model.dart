@@ -1,15 +1,15 @@
-import 'package:muscle_app/models/muscle.dart';
+import 'package:muscle_app/models/muscleModel.dart';
 
-class Exercise {
+class ExerciseModel {
   final int id;
   final String name;
   final String description;
   final String category;
-  final List<Muscle> muscles;
+  final List<MuscleModel> muscles;
   final List<String> equipment;
   final List<String> images;
 
-  const Exercise({
+  const ExerciseModel({
     required this.id,
     required this.name,
     required this.description,
@@ -19,14 +19,14 @@ class Exercise {
     required this.images,
   });
 
-  factory Exercise.fromJson(Map<String, dynamic> json) {
-    return Exercise(
+  factory ExerciseModel.fromJson(Map<String, dynamic> json) {
+    return ExerciseModel(
       id: json['id'] ?? 0,
       name: _getExerciseName(json),
       description: json['description'] ?? '',
       category: json['category']?['name'] ?? '',
       muscles: (json['muscles'] as List? ?? [])
-          .map((muscleJson) => Muscle.fromJson(muscleJson))
+          .map((muscleJson) => MuscleModel.fromJson(muscleJson))
           .toList(),
       equipment: (json['equipment'] as List? ?? [])
           .map((item) => item['name'].toString())

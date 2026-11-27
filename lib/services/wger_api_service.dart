@@ -3,12 +3,12 @@ import 'dart:developer' as developer;
 
 import 'package:http/http.dart' as http;
 
-import '../models/exercise.dart';
+import '../models/exercise_model.dart';
 
 class WgerApiService {
   static const baseUrl = 'https://wger.de/api/v2';
 
-  Future<List<Exercise>> fetchExercises() async {
+  Future<List<ExerciseModel>> fetchExercises() async {
     final uri = Uri.parse('$baseUrl/exerciseinfo/?language__code=12&limit=20');
     final response = await http.get(uri);
 
@@ -19,11 +19,13 @@ class WgerApiService {
     final data = jsonDecode(response.body);
     final results = data['results'] as List;
 
-    return results.map((json) => Exercise.fromJson(json)).toList();
+    return results.map((json) => ExerciseModel.fromJson(json)).toList();
   }
 
-  Future<List<Exercise>> fetchExercisesFilterName(String name) async {
-    final uri = Uri.parse('$baseUrl/exerciseinfo/?language__code=12&limit=20&name__search=$name');
+  Future<List<ExerciseModel>> fetchExercisesFilterName(String name) async {
+    final uri = Uri.parse(
+      '$baseUrl/exerciseinfo/?language__code=12&limit=20&name__search=$name',
+    );
     final response = await http.get(uri);
 
     if (response.statusCode != 200) {
@@ -33,6 +35,6 @@ class WgerApiService {
     final data = jsonDecode(response.body);
     final results = data['results'] as List;
 
-    return results.map((json) => Exercise.fromJson(json)).toList();
+    return results.map((json) => ExerciseModel.fromJson(json)).toList();
   }
 }
